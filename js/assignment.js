@@ -21,9 +21,9 @@ function TreeNode(id, title, parent)
 	};
 	
 TreeNode.prototype.save = 
-	function (id,title)
+	function ()
 	{
-		localStorage.setItem("id", JSON.stringify(this) );
+		localStorage.setItem(this.id, JSON.stringify(this) );
 	}
 
 TreeNode.prototype.getNodeById= 
@@ -61,9 +61,10 @@ TreeNode.prototype.addNode =
 TreeNode.prototype.removeChild = 
 	function (id)
 	{
-		for (index = 0; index < this.children.length; ++index) 
+		for (var index = 0; index < this.children.length; ++index) 
 		{
-			if(this.children.id == id)
+			var child = this.children[index];
+			if(child.id == id)
 			{
 				this.children.splice(index, 1);
 			};
@@ -93,7 +94,7 @@ TreeNode.prototype.setNodes=
 	
 function TreeNodeContructor(id) 
 {
-	var mainNode = localStorage.getItem(id);
+	var mainNode = JSON.parse(localStorage.getItem(id));
 	
 	newTree = new TreeNode(mainNode.id, mainNode.title, null);
 	newTree.setNodes(mainNode.children);
@@ -109,6 +110,12 @@ function TreeNodeDisplayer (container)
 
 TreeNodeDisplayer.prototype.toHtml = function (node, container)
 	{
+		if(node.parent_id == null)
+		{
+			container.empty();
+			container.append("<div id=\"node_"+node.id+"\"></div>");
+			container = container.find("#node_"+node.id);
+		}
 		container.empty();
 		container.append("<div id=\"node_title_"+node.id+"\">"+node.title+"<input type=\"button\" class=\"button-add\" value=\"+\" data-id=\""+node.id+"\" /><input type=\"button\"  class=\"button-remove\"  value=\"-\" data-id=\""+node.id+"\" /></div>");
 		container.append("<ul id=\"node_children_"+node.id+"\"></ul>");
@@ -124,6 +131,8 @@ TreeNodeDisplayer.prototype.toHtml = function (node, container)
 
 function prepareAddRemoveNode()
 	{
+		var currentDisplayer = displayer;
+		
 		$("input.button-add")
 			.click(
 					function()
@@ -137,8 +146,8 @@ function prepareAddRemoveNode()
 						
 						node.addNode(new_id, new_title);
 												
-						displayer.toHtml(node, $("#node_"+id));
-						
+						currentDisplayer.toHtml(node, $("#node_"+id));
+						prepareAddRemoveNode();
 					}
 				)
 		;
@@ -157,16 +166,22 @@ function prepareAddRemoveNode()
 							
 							parent.removeChild(node.id);
 													
-							displayer.toHtml(root, $("#node_"+id));
+							currentDisplayer.toHtml(parent, $("#node_"+parent.id));
 						}
+						prepareAddRemoveNode();
 					}
 				)
 		;
+	}
+	
+function prepareLoadSave()
+	{
 		$("input.button-save")
 			.click(
 					function()
 					{
 						root.save();
+						alert("saved");
 					}
 				)
 		;
@@ -175,6 +190,8 @@ function prepareAddRemoveNode()
 					function()
 					{
 						root = new TreeNodeContructor("root");
+						displayer.toHtml(parent, $("#node_"+root.id));
+						prepareAddRemoveNode();
 					}
 				)
 		;
@@ -207,11 +224,12 @@ function aaa()
 		element3_3.addNode("0_3_3_3", "subchild");
 		
 		
-		var displayer = new TreeNodeDisplayer();
+		displayer = new TreeNodeDisplayer();
 		displayer.toHtml(root, $("#container"));
 
 
 		prepareAddRemoveNode();
+		prepareLoadSave();
 
 	}
 
