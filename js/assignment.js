@@ -201,7 +201,7 @@ function prepareLoadSave()
 					{
 						e.preventDefault();
 						root = new TreeNodeContructor("root");
-						displayer.toHtml(parent, $("#node_"+root.id));
+						displayer.toHtml(root, $("#node_"+root.id));
 						prepareAddRemoveNode();
 						alert("loaded");
 					}
