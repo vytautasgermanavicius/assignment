@@ -111,9 +111,9 @@ function aaa()
 		element3_1.addNode("hhh", "Another subchild");
 		element3_1.addNode("eee", "another subchild");
 		element3_2 = element3.addNode("eee", "Child #2 of element #3");
-		element3_3.addNode("lll", "subchild");
-		element3_3.addNode("mmm", "subchild");
-		element3_3.addNode("nnn", "subchild");
+		element3_2.addNode("lll", "subchild");
+		element3_2.addNode("mmm", "subchild");
+		element3_2.addNode("nnn", "subchild");
 		element3_3 = element3.addNode("fff", "Child #3 of element #3");
 		element3_3.addNode("iii", "subchild");
 		element3_3.addNode("jjj", "subchild");
