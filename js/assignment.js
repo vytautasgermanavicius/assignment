@@ -94,8 +94,13 @@ TreeNode.prototype.setNodes=
 	
 function TreeNodeContructor(id) 
 {
-	var mainNode = JSON.parse(localStorage.getItem(id));
+	var mainNode = localStorage.getItem(id);
+	if(mainNode == null)
+	{
+		return root;
+	}
 	
+	mainNode = JSON.parse(mainNode);
 	if(mainNode.length > 0)
 	{
 		newTree = new TreeNode(mainNode.id, mainNode.title, null);
