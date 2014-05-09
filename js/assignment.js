@@ -101,14 +101,10 @@ function TreeNodeContructor(id)
 	}
 	
 	mainNode = JSON.parse(mainNode);
-	if(mainNode.length > 0)
-	{
-		newTree = new TreeNode(mainNode.id, mainNode.title, null);
-		newTree.setNodes(mainNode.children);
+	newTree = new TreeNode(mainNode.id, mainNode.title, null);
+	newTree.setNodes(mainNode.children);
 
-		return newTree;
-	}
-	return root;
+	return newTree;
 }
 
 
