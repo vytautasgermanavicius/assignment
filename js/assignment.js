@@ -96,10 +96,14 @@ function TreeNodeContructor(id)
 {
 	var mainNode = JSON.parse(localStorage.getItem(id));
 	
-	newTree = new TreeNode(mainNode.id, mainNode.title, null);
-	newTree.setNodes(mainNode.children);
+	if(mainNode.length > 0)
+	{
+		newTree = new TreeNode(mainNode.id, mainNode.title, null);
+		newTree.setNodes(mainNode.children);
 
-	return newTree;
+		return newTree;
+	}
+	return root;
 }
 
 
@@ -178,8 +182,9 @@ function prepareLoadSave()
 	{
 		$("input.button-save")
 			.click(
-					function()
+					function(e)
 					{
+						e.preventDefault();
 						root.save();
 						alert("saved");
 					}
@@ -187,11 +192,13 @@ function prepareLoadSave()
 		;
 		$("input.button-load")
 			.click(
-					function()
+					function(e)
 					{
+						e.preventDefault();
 						root = new TreeNodeContructor("root");
 						displayer.toHtml(parent, $("#node_"+root.id));
 						prepareAddRemoveNode();
+						alert("loaded");
 					}
 				)
 		;
